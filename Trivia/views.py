@@ -1,13 +1,15 @@
-from Provincializacion.models import UsuarioTrivia
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.query_utils import select_related_descend
+from django.http.response import Http404
+from Provincializacion.models import PreguntasRespondidas, UsuarioTrivia
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect, render
 from .forms import UserRegisterForm, UsuarioLoginFormulario
-
 from django.contrib.auth.models import User
-
+from Provincializacion.models import UsuarioTrivia, Pregunta
 
 
 def registro(request):
@@ -28,6 +30,37 @@ def registro(request):
 def Home(request):
     return render(request,"home.html",{})
 
+def jugar(request):
+    
+    #si el usuario ingresa a jugar.html, se crea un UsuarioTrivia, si ya está creado lo obtiene
+    UserTrivia, created = UsuarioTrivia.objects.get_or_create(usuario=request.user)
+
+    if request.method == "POST":
+        pregunta_pk = request.POST.get("pregunta_pk")
+        pregunta_respondida = UserTrivia.intentos.select_related("pregunta").get(pregunta__pk=pregunta_pk)
+        respuesta_pk = request.POST.get("respuesta_pk")
+
+        try:
+            opcion_seleccionada = pregunta_respondida.pregunta.opciones.get(pk=respuesta_pk)
+
+
+        except ObjectDoesNotExist:
+            raise Http404
+
+        UserTrivia.validacion_intento(pregunta_respondida, opcion_seleccionada)
+        
+        return redirect(pregunta_respondida)
+
+    else:
+        pregunta = UserTrivia.obtener_preguntas_nuevas()
+        if pregunta is not None:
+            UserTrivia.crear_intentos(pregunta)
+        
+        context = {
+            "pregunta":pregunta
+
+        }
+    return render(request, "play/jugar.html", context)
 
 def loginView(request):
     form = UsuarioLoginFormulario(request.POST or None)
@@ -49,10 +82,7 @@ def logoutView(request):
     return redirect("inicio")
 
 
-def jugar(request):
-    
-    #si el usuario ingresa a jugar.html, se crea un UsuarioTrivia, si ya está creado lo obtiene
-    UserTrivia = UsuarioTrivia.objects.get_or_create(usuario=request.user)
+
 
 
 # def prueba(request):
