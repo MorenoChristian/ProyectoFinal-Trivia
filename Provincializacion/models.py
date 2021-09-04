@@ -11,7 +11,7 @@ class Pregunta(models.Model):
     
     texto = models.TextField(verbose_name = 'Texto de la pregunta')
 
-    max_puntaje = models.DecimalField(verbose_name="Puntaje Maximo", default=0, decimal_places=2, max_digits=6)
+    max_puntaje = models.DecimalField(verbose_name="Puntaje Maximo", default=4, decimal_places=2, max_digits=6)
 
     def __str__(self): #Con este método le decimos a python que nos retorne el valor self.texto de la clase
         return self.texto
@@ -31,6 +31,7 @@ class ElegirRespuesta(models.Model):
         return self.texto
 
 #Usuario que tiene una relacion uno a uno con el usuario origina, pero este almacena su nombre y el puntaje al ingresar a jugar/
+
 class UsuarioTrivia(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     puntaje_total = models.DecimalField(verbose_name='Puntaje Total', default=0, decimal_places=2, max_digits=10)
@@ -40,7 +41,7 @@ class UsuarioTrivia(models.Model):
         intento.save()
     
     def obtener_preguntas_nuevas(self):
-        respondidas = PreguntasRespondidas.objects.filter(triviauser=self). values_list("pregunta__pk", flat=True)
+        respondidas = PreguntasRespondidas.objects.filter(triviauser=self).values_list("pregunta__pk", flat=True)
         preguntas_restantes = Pregunta.objects.exclude(pk__in=respondidas)
         if not preguntas_restantes.exists():
             return None
@@ -54,13 +55,14 @@ class UsuarioTrivia(models.Model):
         if respuesta_seleccionada.correcta is True:
             pregunta_respondida.correcta = True
             pregunta_respondida.puntaje_obtenido = respuesta_seleccionada.pregunta.max_puntaje
+            pregunta_respondida.respuesta = respuesta_seleccionada
 
         pregunta_respondida.save()
 
 
 class PreguntasRespondidas(models.Model):
-    triviauser = models.ForeignKey(UsuarioTrivia, on_delete=models.CASCADE)
+    triviauser = models.ForeignKey(UsuarioTrivia, on_delete=models.CASCADE, related_name= 'intentos')
     pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
-    respuesta = models.ForeignKey(ElegirRespuesta, on_delete=models.CASCADE, related_name='intentos')
+    respuesta = models.ForeignKey(ElegirRespuesta, on_delete=models.CASCADE, null=True)
     correcta = models.BooleanField(verbose_name='¿Es esta la respuesta correcta?', default=False, null=False)
     puntaje_obtenido = models.DecimalField(verbose_name='Puntaje Obtenido', default=0, decimal_places=2, max_digits=6)
