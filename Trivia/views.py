@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .forms import UserRegisterForm, UsuarioLoginFormulario
 from django.contrib.auth.models import User
 from Provincializacion.models import UsuarioTrivia, Pregunta
@@ -36,21 +36,20 @@ def jugar(request):
     UserTrivia, created = UsuarioTrivia.objects.get_or_create(usuario=request.user)
 
     if request.method == "POST":
-        pregunta_pk = request.POST.get("pregunta_pk")
-        pregunta_respondida = UserTrivia.intentos.select_related("pregunta").get(pregunta__pk=pregunta_pk)
+        pregunta_pk = request.POST.get('pregunta_pk')
+        pregunta_respondida = UserTrivia.intentos.select_related('pregunta').get(pregunta__pk=pregunta_pk)
         respuesta_pk = request.POST.get("respuesta_pk")
 
         try:
             opcion_seleccionada = pregunta_respondida.pregunta.opciones.get(pk=respuesta_pk)
-
-
         except ObjectDoesNotExist:
             raise Http404
 
         UserTrivia.validacion_intento(pregunta_respondida, opcion_seleccionada)
         
-        return redirect(pregunta_respondida)
+        return redirect('resultado', pregunta_respondida.pk)
 
+       
     else:
         pregunta = UserTrivia.obtener_preguntas_nuevas()
         if pregunta is not None:
@@ -61,6 +60,15 @@ def jugar(request):
 
         }
     return render(request, "play/jugar.html", context)
+
+
+def resultado_pregunta(request, pregunta_respondida_pk):
+    respondida = get_object_or_404(PreguntasRespondidas, pk=pregunta_respondida_pk)
+
+    context = {
+        'respondida': respondida
+    }
+    return render(request, 'play/resultados.html', context)
 
 def loginView(request):
     form = UsuarioLoginFormulario(request.POST or None)
