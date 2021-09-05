@@ -16,26 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from Provincializacion.views import inicio
-from Trivia.views import (
-                    registro, 
-                    loginView, 
-                    logoutView, 
-                    Home, 
-                    jugar, 
-                    resultado_pregunta)
+from Trivia.views import registro, loginView, logoutView, Home, jugar, resultado_pregunta
+
 
 urlpatterns = [
-
     path('admin/', admin.site.urls),
     path("inicio/", inicio, name="inicio"),
+    path("home/", Home, name="home"),
 
     path("registro/",registro),
     path("login/",loginView, name="login"),
     path("logout/", logoutView, name="logout"),
-
-    path("home/", Home, name="home"),
+    
     path("jugar/",jugar, name="jugar"),
-
-    path('resultado/<int:pregunta_respondida_pk>/', resultado_pregunta, name='resultado')
-
+    path("resultado/ <int:pregunta_respondida_pk>/", resultado_pregunta, name = 'resultado')
 ]

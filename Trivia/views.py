@@ -1,15 +1,16 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.query_utils import select_related_descend
 from django.http.response import Http404
-from Provincializacion.models import PreguntasRespondidas, UsuarioTrivia
+from Provincializacion.models import UsuarioTrivia, Pregunta, PreguntasRespondidas
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from .forms import UserRegisterForm, UsuarioLoginFormulario
+
 from django.contrib.auth.models import User
-from Provincializacion.models import UsuarioTrivia, Pregunta
+
+
 
 
 def registro(request):
@@ -30,45 +31,6 @@ def registro(request):
 def Home(request):
     return render(request,"home.html",{})
 
-def jugar(request):
-    
-    #si el usuario ingresa a jugar.html, se crea un UsuarioTrivia, si ya está creado lo obtiene
-    UserTrivia, created = UsuarioTrivia.objects.get_or_create(usuario=request.user)
-
-    if request.method == "POST":
-        pregunta_pk = request.POST.get('pregunta_pk')
-        pregunta_respondida = UserTrivia.intentos.select_related('pregunta').get(pregunta__pk=pregunta_pk)
-        respuesta_pk = request.POST.get("respuesta_pk")
-
-        try:
-            opcion_seleccionada = pregunta_respondida.pregunta.opciones.get(pk=respuesta_pk)
-        except ObjectDoesNotExist:
-            raise Http404
-
-        UserTrivia.validacion_intento(pregunta_respondida, opcion_seleccionada)
-        
-        return redirect('resultado', pregunta_respondida.pk)
-
-       
-    else:
-        pregunta = UserTrivia.obtener_preguntas_nuevas()
-        if pregunta is not None:
-            UserTrivia.crear_intentos(pregunta)
-        
-        context = {
-            "pregunta":pregunta
-
-        }
-    return render(request, "play/jugar.html", context)
-
-
-def resultado_pregunta(request, pregunta_respondida_pk):
-    respondida = get_object_or_404(PreguntasRespondidas, pk=pregunta_respondida_pk)
-
-    context = {
-        'respondida': respondida
-    }
-    return render(request, 'play/resultados.html', context)
 
 def loginView(request):
     form = UsuarioLoginFormulario(request.POST or None)
@@ -84,13 +46,48 @@ def loginView(request):
     return render(request,"login.html",contexto)
 
 
-# Logout viene por defecto con django.conrtib.auth, y el simple hecho de 'ejecutarlo' ya hace logout del usuario
+# Logout viene por defecto con django.contrib.auth, y el simple hecho de 'ejecutarlo' ya hace logout del usuario
 def logoutView(request):
     logout(request)
     return redirect("inicio")
 
 
+def jugar(request):
+    
+    #si el usuario ingresa a jugar.html, se crea un UsuarioTrivia, si ya está creado lo obtiene
+    UserTrivia, created = UsuarioTrivia.objects.get_or_create(usuario=request.user)
 
+    if request.method == 'POST':
+	    pregunta_pk = request.POST.get('pregunta_pk')
+	    pregunta_respondida = UserTrivia.intentos.select_related('pregunta').get(pregunta__pk=pregunta_pk)
+	    respuesta_pk = request.POST.get('respuesta_pk')
+
+	    try:
+	    	opcion_selecionada = pregunta_respondida.pregunta.opciones.get(pk=respuesta_pk)
+	    except ObjectDoesNotExist:
+	    	raise Http404
+
+	    UserTrivia.validar_intento(pregunta_respondida, opcion_selecionada)
+
+	    return redirect('resultado', pregunta_respondida.pk)
+
+    else:
+    	pregunta = UserTrivia.obtener_nuevas_preguntas()
+    	if pregunta is not None:
+    		UserTrivia.crear_intentos(pregunta)
+
+    	contexto = {
+			'pregunta':pregunta
+		}
+    return render(request,'jugar.html', contexto)
+
+def resultado_pregunta(request, pregunta_respondida_pk):
+    respondida = get_object_or_404(PreguntasRespondidas, pk=pregunta_respondida_pk)
+
+    contexto = {
+        'respondida':respondida
+    }
+    return render(request,'resultados.html', contexto)
 
 
 # def prueba(request):

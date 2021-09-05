@@ -1,8 +1,9 @@
 from django import forms 
 # este import incluye los formularios de django, el modelo de usuario predeterminado y el formulario de creacion
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.contrib.auth import authenticate, get_user_model
+from django.db.models.constraints import UniqueConstraint
 
 class UsuarioLoginFormulario(forms.Form):
     username = forms.CharField()
@@ -26,11 +27,11 @@ class UsuarioLoginFormulario(forms.Form):
 
 class UserRegisterForm(UserCreationForm): #Agregamos los fields que creamos necesarios, ya que 'UserCreationForm' ya posee user, pass1 y pass2
     email= forms.EmailField()
-    password1= forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    password1= forms.CharField(label='Contraseña', widget=forms.PasswordInput) #widget oculta contraseña
     password2= forms.CharField(label='Confirma contraseña', widget=forms.PasswordInput)
 
     class Meta:
-        model = User
+        model = User # INVESTIGAR
         #orden en el que van a aparecer los Fields
         fields = ['username', 'email', 'password1', 'password2']
         help_texts = {k:'' for k in fields}
