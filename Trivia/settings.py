@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATICFILES_DIRS = ["C:/Users/Christian/Desktop/trivia2/Trivia/Trivia/Template/static"]
+STATICFILES_DIRS = ["C:/Users/RENZO/Informatorio/ProyectoFinal-Trivia/Trivia/Template/static"]
 
 
 # Application definition
