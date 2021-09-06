@@ -29,6 +29,8 @@ def registro(request):
 
 
 def Home(request):
+    borrar_respuestas = PreguntasRespondidas.objects.all()
+    borrar_respuestas.delete()
     return render(request,"home.html",{})
 
 
@@ -50,6 +52,17 @@ def loginView(request):
 def logoutView(request):
     logout(request)
     return redirect("inicio")
+
+def tablero(request):
+    total_usuarios_quiz = UsuarioTrivia.objects.order_by('-puntaje_total')[:10]
+    contador = total_usuarios_quiz.count()
+    
+    context = {
+
+        'usuario_quiz': total_usuarios_quiz,
+        'contar_usuario': contador
+    }
+    return render(request, 'tablero.html', context)
 
 
 def jugar(request):
