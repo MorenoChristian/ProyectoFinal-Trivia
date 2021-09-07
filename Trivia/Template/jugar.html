@@ -30,19 +30,25 @@
 
 {% if pregunta is None %}
 
-<div class="container">
-	<div class="jumbotron my-4">
-		<h1>Ya haz respondido a todas nuestras preguntas. Mira el tablero de posiciones</h1>
-		<a href=>Ver Aqui</a>
+<div class="container" style="padding-top: 200px; padding-bottom: 378px; padding-left: 163px; text-align: center; padding-right: 110px;">
+	<div class="jumbotron my-4" style="box-shadow: 1px 5px 5px 5px gray; padding-bottom: 21px;">
+		<h1>Ya haz respondido a todas nuestras preguntas. Puedes Compartir tus resultados y Mirar el tablero de posiciones</h1>
+        <br>
+        <div style="padding-bottom: 20px;">
+            <a href= "tablero">Ver Tablero Aqui</a>
+            <a style="color: #e3778f;" href="http://www.facebook.com/sharer.php?u=https://http://127.0.0.1:8000/jugar/tablero" target="_blank" rel="noopener">Compartir en Facebook</a>
+            <span style="color: #e3778f;"><a class="twitter-share-button" style="color: #e3778f;" href="https://twitter.com/share" data-lang="es" data-url="http://127.0.0.1:8000/jugar/tablero" data-via="Tictac_si">Compartir en Twitter</a>
+            </span>
+        </div>
 	</div>
 </div>
 
 {% else %}
 
 
-<div class="container" style="padding-top: 200px; padding-bottom: 330px; padding-left: 163px;">
+<div class="container" style="padding-top: 200px; padding-bottom: 330px; padding-left: 163px; padding-right: 110px;">
 	
-	<div class="jumbotron my-4" style="box-shadow: 1px 5px 5px 5px gray">
+	<div class="jumbotron my-4" style="box-shadow: 1px 5px 5px 5px gray; padding: 20px">
 		
 		<h3>
 		    {{pregunta.texto}}
