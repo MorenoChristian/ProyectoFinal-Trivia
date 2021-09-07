@@ -28,24 +28,24 @@
         </nav>
         
 
-		{% if pregunta is None %}
+{% if pregunta is None %}
 
 <div class="container">
 	<div class="jumbotron my-4">
 		<h1>Ya haz respondido a todas nuestras preguntas. Mira el tablero de posiciones</h1>
-		<a href= "tablero">Ver Aqui</a>
+		<a href=>Ver Aqui</a>
 	</div>
 </div>
 
 {% else %}
 
 
-<div class="container" style="padding-top: 100px; padding-bottom: 430px; padding-left: 163px;">
+<div class="container" style="padding-top: 200px; padding-bottom: 330px; padding-left: 163px;">
 	
-	<div class="jumbotron my-4">
+	<div class="jumbotron my-4" style="box-shadow: 1px 5px 5px 5px gray">
 		
 		<h3>
-			{{pregunta.texto}}
+		    {{pregunta.texto}}
 		</h3>
 
 		<form method="POST" class="form">
@@ -63,7 +63,7 @@
 				</p>
 			{% endfor %}
 
-			<button type="submit" class="btn btn-success">
+			<button type="submit" class="btn btn-success" style="margin-left: 25px; margin-bottom: 10px;">
 				Enviar
 			</button>
 
