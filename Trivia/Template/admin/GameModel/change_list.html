@@ -1,0 +1,147 @@
+# Quiz/templates/admin/GameModel/change_list.html
+
+{% extends "admin/change_list.html" %}
+{% load static %}
+<!-- Override extrahead to add Chart.js -->
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+{% endblock %}
+{% block content %}
+
+<h1>Estadísticas de Partidas y Puntos por Partidas</h1>
+<section style="width: 100%; display: inline-flex;">
+    <!-- Render our chart -->
+    <div style="width: 50%;" >
+        <canvas style="margin-bottom: 30px; width:50%; height: 200px;" id="GChart" data-json="{{GData}}"></canvas>
+    </div>
+    <div style="width: 50%;">
+        <canvas style="margin-bottom: 30px; width: 50%; height: 200px;" id="PChart" data-json="{{PData}}"></canvas>
+    </div>
+</section>
+
+<!-- Render the rest of the ChangeList view by calling block.super -->
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ctx = document.getElementById('GChart').getContext('2d');
+
+        // Sample data
+
+        const gamesData = {{ GData | safe}};
+        console.log(gamesData)
+
+    // Parse the dates to JS
+    gamesData.forEach((d) => {
+        d.x = new Date(d.date);
+    });
+
+    // Render the chart
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: [
+                {
+                    label: 'Partidas por día',
+                    data: gamesData,
+                    backgroundColor: 'rgba(220,20,20,0.5)',
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [
+                    {
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            round: 'day',
+                            displayFormats: {
+                                day: 'MMM D',
+                            },
+                        },
+                    },
+                ],
+                yAxes: [
+                    {
+                        ticks: {
+                            beginAtZero: true,
+                        },
+                    },
+                ],
+            },
+        },
+    });
+
+    const ctx2 = document.getElementById('PChart').getContext('2d');
+
+        // Sample data
+
+        const pointsData = {{ PData | safe}};
+        console.log(pointsData)
+
+    // Parse the dates to JS
+    pointsData.forEach((d) => {
+        d.x = new Date(d.date);
+    });
+
+    // Render the chart
+    const chartP = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            datasets: [
+                {
+                    label: 'Promedio de puntos por día',
+                    data: pointsData,
+                    borderColor: 'rgba(220,20,20,0.5)',
+                    backgroundColor: 'transparent',
+                    pointBorderColor: 'rgba(220,20,20,0.5)',
+                    pointBackgroundColor: 'rgba(220,20,20,0.5)',
+                    pointRadius: 5,
+                    pointHoverRadius: 10,
+                    pointHitRadius: 30,
+                    pointBorderWidth: 2,
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                boxWidth: 0,
+                fontColor: 'black'
+                }
+            },
+            scales: {
+                xAxes: [
+                    {
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            round: 'day',
+                            displayFormats: {
+                                day: 'MMM D',
+                            },
+                        },
+                    },
+                ],
+                yAxes: [
+                    {
+                        ticks: {
+                            beginAtZero: true,
+                        },
+                        
+                    },
+                ],
+            },
+        },
+    });
+
+  });
+</script>
+{% endblock %}

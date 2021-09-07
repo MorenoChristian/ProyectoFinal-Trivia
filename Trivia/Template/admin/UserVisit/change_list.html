@@ -1,0 +1,95 @@
+# Quiz/templates/admin/UserVisit/change_list.html
+
+{% extends "admin/change_list.html" %}
+{% load static %}
+<!-- Override extrahead to add Chart.js -->
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+{% endblock %}
+{% block content %}
+
+<h1>Gráficos de Visitas al Sitio</h1>
+<section style="width: 100%; display: inline-flex;">
+    <!-- Render our chart -->
+    <div style="width: 100%;" >
+        <canvas style="margin-bottom: 30px; width:50%; height: 200px;" id="UChart" data-json="{{UData}}"></canvas>
+    </div>
+</section>
+
+<!-- Render the rest of the ChangeList view by calling block.super -->
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ctx = document.getElementById('UChart').getContext('2d');
+
+        // Sample data
+
+        const usersData = {{ UData | safe}};
+        console.log(usersData)
+
+    // Parse the dates to JS
+    usersData.forEach((d) => {
+        d.x = new Date(d.date);
+    });
+
+    // Render the chart
+    const chartU = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+                {
+                    label: 'Visitas por día',
+                    data: usersData,
+                    borderColor: 'rgba(220,20,20,0.5)',
+                    backgroundColor: 'transparent',
+                    pointBorderColor: 'rgba(220,20,20,0.5)',
+                    pointBackgroundColor: 'rgba(220,20,20,0.5)',
+                    pointRadius: 5,
+                    pointHoverRadius: 10,
+                    pointHitRadius: 30,
+                    pointBorderWidth: 2,
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                boxWidth: 0,
+                fontColor: 'black'
+                }
+            },
+            scales: {
+                xAxes: [
+                    {
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            round: 'day',
+                            displayFormats: {
+                                day: 'MMM D',
+                            },
+                        },
+                    },
+                ],
+                yAxes: [
+                    {
+                        ticks: {
+                            beginAtZero: true,
+                        },
+                        
+                    },
+                ],
+            },
+        },
+    });
+
+    
+  });
+</script>
+{% endblock %}

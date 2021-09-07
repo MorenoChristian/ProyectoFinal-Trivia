@@ -7717,8 +7717,7 @@ textarea.form-control-lg {
 }
 
 .text-info {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-info-rgb), var(--bs-text-opacity)) !important;
+ color: rgb(10, 10, 10);
 }
 
 .text-warning {
