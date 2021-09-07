@@ -102,6 +102,9 @@ def resultado_pregunta(request, pregunta_respondida_pk):
     }
     return render(request,'resultados.html', contexto)
 
+def nosotros(request):
+    return render(request, "nosotros.html",{})
+
 
 # def prueba(request):
 #     usuarios = User.objects.all()

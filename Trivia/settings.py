@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATICFILES_DIRS = ["C:\ProyectosDjango\ProyectoFinal-Trivia-AHORA SI.SI\ProyectoFinal-Trivia-1\Trivia\Template\static"]
+STATICFILES_DIRS = ["C:\ProyectosDjango\ProyectoFinal-Trivia-AHORASIQUESI\ProyectoFinal-Trivia\Trivia\Template\static"]
 
 
 # Application definition
