@@ -33,6 +33,9 @@ def Home(request):
     borrar_respuestas.delete()
     return render(request,"home.html",{})
 
+def nosotros(request):
+    return render(request, "nosotros.html",{})
+
 
 def loginView(request):
     form = UsuarioLoginFormulario(request.POST or None)

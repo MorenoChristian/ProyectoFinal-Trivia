@@ -1,12 +1,39 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Chaco-Trivia</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'css/estilo_inicio.css'%}" rel="stylesheet" />
+    </head>
+	<!-- Navigation-->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+		<div class="container px-4">
+			<a class="navbar-brand" href="#">Chaco-Trivia</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item"><a class="nav-link" href="#about"></a></li>
+					<li class="nav-item"><a class="nav-link" href="/login/"></a></li>
+					<li class="nav-item"><a class="nav-link" href="#contact"></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	
 
 
 {% block contenido %}
 
-<div class="container">
+<div class="container" style="padding-top: 150px; padding-bottom: 410px; padding-left: 163px; padding-right: 110px;">
 	
-	<div class="jumbotron my-4">
-		<h3 class="text-info">{{respondida.pregunta.texto|safe}}</h3>
+	<div class="jumbotron my-4" style="box-shadow: 1px 5px 5px 5px gray; padding: 20px">
+		<h3  style="color: black;">{{respondida.pregunta.texto|safe}}</h3>
 		<p>
 			<strong>Tu respuesta:</strong>
 			{{respondida.respuesta.texto|safe}}
@@ -40,6 +67,10 @@
 
 
 </div>
+<footer class="py-5 bg-dark">
+	<div class="container px-4"><p class="m-0 text-center text-white">Copyright &copy; Chaco-Trivia</p></div>
+</footer>
+
 
 
 {% endblock %}

@@ -21,7 +21,8 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#about"></a></li>
                         <li class="nav-item"><a class="nav-link" href="/login/"></a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact"></a></li>
+                        <li class="nav-item"><a class="nav-link" href="/home/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/logout/">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -31,12 +32,12 @@
 
 {% if pregunta is None %}
 
-<div class="container" style="padding-top: 200px; padding-bottom: 290px; padding-left: 163px; text-align: center; padding-right: 110px;">
-	<div class="jumbotron my-4" style="box-shadow: 1px 5px 5px 5px gray; padding-bottom: 21px;">
+<div class="container" style="padding-top: 200px; padding-bottom: 330px; padding-left: 163px; padding-right: 110px;">
+	<div class="jumbotron my-4" style="box-shadow: 1px 5px 5px 5px gray; padding-bottom: 21px; text-align: center;">
 		<h1>Ya haz respondido a todas nuestras preguntas. Puedes Compartir tus resultados y Mirar el tablero de posiciones</h1>
         <br>
         <div style="padding-bottom: 20px;">
-            <a href= "tablero">Ver Tablero Aqui</a>
+            <button class="btn btn-danger"><a style="color: blanchedalmond; text-decoration: none;" href= "tablero">Ver Tablero Aqui</a></button>
             <h3>O comparte tus resultados en:</h3>
             <a style="color: #e3778f;" href="http://www.facebook.com/sharer.php?u=https://http://127.0.0.1:8000/jugar/tablero" target="_blank" rel="noopener"><img src="/static/imagen/face.jpg" style="height: 50px; width: 50px;"></a>
             <span style="color: #e3778f;"><a class="twitter-share-button" style="color: #e3778f;" href="https://twitter.com/share" data-lang="es" data-url="http://127.0.0.1:8000/jugar/tablero" data-via="Tictac_si"><img src="/static/imagen/twitter.png" style="height: 47px; width: 47px;"></a>
